@@ -1,0 +1,101 @@
+DROP TABLE OrderLineTable;
+DROP TABLE OrderTable;
+DROP TABLE ProductTable;
+DROP TABLE CustomerTable;
+
+Create Table CustomerTable
+	(Customer_ID		NUMBER(11,0)		NOT NULL,
+	Name			VARCHAR2(25),
+	Address			VARCHAR2(50),
+	Phone_number	NUMBER(10),
+	Email_address		VARCHAR2(20),
+CONSTRAINT CustomerTable_PK PRIMARY KEY (Customer_ID));
+
+Create Table ProductTable
+	(Product_ID				NUMBER(11,0)		NOT NULL,
+	ProductName				VARCHAR2(25),
+	ProductDescription   	VARCHAR2(50),
+	ProductPrice				NUMBER(10),
+CONSTRAINT ProductTable_PK PRIMARY KEY (Product_ID));
+
+Create Table OrderTable
+	(Order_ID				NUMBER(11,0)		NOT NULL,
+	OrderDate			DATE DEFAULT SYSDATE,
+	TotalPrice				NUMBER(10),
+	Customer_ID				NUMBER(11,0),
+CONSTRAINT OrderTable_PK PRIMARY KEY (Order_ID),
+CONSTRAINT OrderTable_FK FOREIGN KEY (Customer_ID) REFERENCES CustomerTable(Customer_ID));
+
+Create Table OrderLineTable
+	(Order_ID			NUMBER(11,0)	NOT NULL,
+	Product_ID			NUMBER(11,0)	NOT NULL,
+	ItemDescription			VARCHAR2(50),
+	OrderedQuantity		NUMBER(11,0),
+	PricePerUnit			NUMBER(10),
+CONSTRAINT OrderLineTable_PK PRIMARY KEY (Order_ID, Product_ID),
+CONSTRAINT OrderLineTable_FK1 FOREIGN KEY (Order_ID) REFERENCES OrderTable(Order_ID),
+CONSTRAINT OrderLineTable_FK2 FOREIGN KEY (Product_ID) REFERENCES ProductTable(Product_ID));
+
+
+Insert into CustomerTable values (1,		'John',	    'Courtney Road',	4456781241,		'john@yahoo.com');
+Insert into CustomerTable values (2,       'Jack',     'Westland',         4567142562,     'jack@yahoo.com');
+Insert into CustomerTable values (3,       'Marry',    'Maiden Choice',    4617654367,     'marry@gmail,com');
+Insert into CustomerTable values (4,       'Kate',     'Westland',         4567342123,     'kate1@gmail.com');
+Insert into CustomerTable values (5,       'Henry',    'Elicot City',      4987415673,     'henry32@gmail.com');
+Insert into CustomerTable values (6,       'Jackson',  'Halethorpe',       4986254765,     'jackson89@gmail.com');
+Insert into CustomerTable values (7,       'Sara',     'Park road',        2189654367,      'sara@gmail.com');
+Insert into CustomerTable values (8,       'Mandy',    'Parkers avenue',   2765347865,     'mandy@gmail.com');
+Insert into CustomerTable values (9,       'Hurley',   'Courtney Road',    4765346234,      'hurley@yahoo.com');
+Insert into CustomerTable values (10,      'Jessica',  'Park road',        4895643234,     'jessica@hotmail.com');
+
+Insert into ProductTable values (1,        'Laptop',     'MacBook Air',     700);
+Insert into ProductTable values (2,        'Laptop',             'Microsoft Surface',             900);
+Insert into ProductTable values (3,        'Laptop',             'MacBook Pro',             1200);
+Insert into ProductTable values (4,        'iPad',             'iPad Pro',             650);
+Insert into ProductTable values (5,        'iPad',             'iPad Mini',             500);
+Insert into ProductTable values (6,        'Tab',             'Samsung Galaxy',             500);
+Insert into ProductTable values (7,        'Phone',             'iPhone XS',             1000);
+Insert into ProductTable values (8,        'Phone',             'iPhone XS Max',             1100);
+Insert into ProductTable values (9,        'Desktop PC',             'Dell',             1500);
+Insert into ProductTable values (10,        'Desktop PC',             'Lenovo',             1300);
+
+Insert into OrderTable values (1,      TO_DATE('3-DEC-2019', 'DD-MON-YYYY'),     3000,       1);
+Insert into OrderTable values (2,      TO_DATE('10-DEC-2019', 'DD-MON-YYYY'),     3900,       2);
+Insert into OrderTable values (3,      TO_DATE('14-DEC-2019', 'DD-MON-YYYY'),     500,       3);
+Insert into OrderTable values (4,      TO_DATE('15-DEC-2019', 'DD-MON-YYYY'),     650,       4);
+Insert into OrderTable values (5,      TO_DATE('15-DEC-2019', 'DD-MON-YYYY'),     500,       5);
+Insert into OrderTable values (6,      TO_DATE('18-DEC-2019', 'DD-MON-YYYY'),     3000,       9);
+Insert into OrderTable values (7,      TO_DATE('21-DEC-2019', 'DD-MON-YYYY'),     1500,       5);
+Insert into OrderTable values (8,      TO_DATE('25-DEC-2019', 'DD-MON-YYYY'),     900,       6);
+Insert into OrderTable values (9,      TO_DATE('26-DEC-2019', 'DD-MON-YYYY'),     1100,       8);
+Insert into OrderTable values (10,      TO_DATE('27-DEC-2019', 'DD-MON-YYYY'),     900,       3);
+
+Insert into OrderLineTable values (1,  1,  'MacBook Air',      1,  700);
+Insert into OrderLineTable values (1,  7,  'iPhone XS',        1,  1000);
+Insert into OrderLineTable values (1,  10, 'Lenovo',           1,  1300);
+Insert into OrderLineTable values (2,  3,  'MacBook Pro',      2,  1200);
+Insert into OrderLineTable values (2,  9,  'Dell',             1,  1500);
+Insert into OrderLineTable values (3,  5,  'iPad Mini',        1,  500);
+Insert into OrderLineTable values (4,  4,  'iPad Pro',         1,  650);
+Insert into OrderLineTable values (5,  6,  'Samsung Galaxy',   1,  500);
+Insert into OrderLineTable values (9,  8,  'iPhone XS Max',    1,  1100);
+Insert into OrderLineTable values (10, 2,  'Microsoft Surface',1,  900);
+Insert into OrderLineTable values (8, 2,  'Microsoft Surface',1,  900);
+Insert into OrderLineTable values (7,  9,  'Dell',             1,  1500);
+Insert into OrderLineTable values (6,  9,  'Dell',             2,  1500);
+
+
+select orderLineTable.order_id, orderLineTable.product_id 
+from OrderLineTable  
+where Order_ID =              
+(
+select Order_ID from orderlineTable
+group by Order_ID
+having count(*) > 2
+)
+;
+
+select * from ProductTable;
+
+select * from OrderTable where customer_id = 8;
+
