@@ -1,4 +1,4 @@
-### Database Integration ###
+## Database Integration ##
 
 The purpose of project is to build a layer of integration above the local databases. The integration layer is the layer of metadata that includes information that defines the three databases. A metadata layer helps users independently view data using common words. It is a collection of abstractions that are used to resolve multiple issues. 
 
